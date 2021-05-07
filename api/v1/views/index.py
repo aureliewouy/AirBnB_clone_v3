@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Creates an url route for blueprint """
+""" Create URL routes Blueprint """
 from api.v1.views import app_views
 from flask import jsonify
 from models import storage
@@ -11,6 +11,6 @@ def status():
     return jsonify({"status": "OK"})
 
 @app_views.route("/stats")
-def status():
-    """ Returns json status OK """
-    return storage.count()
+def stats():
+    """ Returns the count method """
+    """return storage.count()"""
