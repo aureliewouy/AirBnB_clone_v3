@@ -1,4 +1,3 @@
-
 #!/usr/bin/python3
 """
 A new view for State objects that handles all default RestFul API actions
@@ -10,7 +9,7 @@ from api.v1.views import app_views
 from models.state import State
 
 
-@app_views.route("/states", methods=['GET'], strict_slashes=False)
+@app_views.route("/api/v1/states", methods=['GET'], strict_slashes=False)
 def get_states():
     """retrieves the list of all State objects with info about states"""
     states = []
@@ -19,7 +18,8 @@ def get_states():
     return jsonify(states)
 
 
-@app_views.route("/states/<state_id>", methods=['GET'], strict_slashes=False)
+@app_views.route("/api/v1/states/<state_id>", methods=['GET'],
+                 strict_slashes=False)
 def get_stateobj(state_id):
     """get info about state obj by id"""
     state = storage.get(State, state_id)
@@ -29,7 +29,7 @@ def get_stateobj(state_id):
         abort(404)
 
 
-@app_views.route("/states/<state_id>", methods=['DELETE'],
+@app_views.route("/api/v1/states/<state_id>", methods=['DELETE'],
                  strict_slashes=False)
 def delete_stateobj(state_id):
     """delete state obj by id"""
@@ -42,7 +42,7 @@ def delete_stateobj(state_id):
         abort(404)
 
 
-@app_views.route("/states", methods=['POST'], strict_slashes=False)
+@app_views.route("/api/v1/states", methods=['POST'], strict_slashes=False)
 def create_stateobj():
     """creates a State"""
     # request.get_json() - converts the JSON object into Python data
@@ -56,7 +56,8 @@ def create_stateobj():
     return make_response(jsonify(state.to_dict()), 201)
 
 
-@app_views.route("/states/<state_id>", methods=['PUT'], strict_slashes=False)
+@app_views.route("/api/v1/states/<state_id>", methods=['PUT'],
+                 strict_slashes=False)
 def put_stateobj(state_id):
     """update state obj by id"""
     state = storage.get(State, state_id)
@@ -65,6 +66,6 @@ def put_stateobj(state_id):
     if not request.get_json():
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
     for key, value in request.get_json().items():
-       setattr(state, key, value)
+        setattr(state, key, value)
     state.save()
     return jsonify(state.to_dict())
