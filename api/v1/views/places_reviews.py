@@ -64,6 +64,7 @@ def create_revieweobj():
         return make_response(jsonify({'error': 'Missing user_id'}), 400)
     if 'text' not in kwargs:
         return make_response(jsonify({'error': 'Missing text'}), 400)
+    kwargs['place_id'] = place_id
     review = Review(**kwargs)
     review.save()
     return make_response(jsonify(review.to_dict()), 201)
