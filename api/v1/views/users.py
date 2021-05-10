@@ -49,8 +49,10 @@ def create_user_obj():
     user_data = request.get_json()
     if not user_data:
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
-    if 'name' not in user_data:
+    if 'email' not in user_data:
         return make_response(jsonify({'error': 'Missing name'}), 400)
+    if 'password' not in user_data:
+        return make_response(jsonify({'error': 'Missing password'}), 400)
     # obj = class(**kwargs)
     user = User(**user_data)
     user.save()
@@ -61,12 +63,14 @@ def create_user_obj():
                  strict_slashes=False)
 def put_user_obj(user_id):
     """update user obj by id"""
+    ignore_keys = ['id', 'email', 'created_at', 'updated_at']
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
     if not request.get_json():
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
     for key, value in request.get_json().items():
-        setattr(amenity, key, value)
+        if key not in ignore_keys:
+            setattr(amenity, key, value)
     user.save()
-    return jsonify(user.to_dict())
+    return jsonify(user.to_dict()), 200
