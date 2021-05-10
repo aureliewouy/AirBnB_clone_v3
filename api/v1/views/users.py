@@ -46,15 +46,15 @@ def delete_user_obj(user_id):
 def create_user_obj():
     """creates a User"""
     # request.get_json() - converts the JSON object into Python data
-    user_data = request.get_json()
-    if not user_data:
+    kwargs = request.get_json()
+    if not kwargs:
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
-    if 'email' not in user_data:
+    if 'email' not in kwargs:
         return make_response(jsonify({'error': 'Missing name'}), 400)
-    if 'password' not in user_data:
+    if 'password' not in kwargs:
         return make_response(jsonify({'error': 'Missing password'}), 400)
     # obj = class(**kwargs)
-    user = User(**user_data)
+    user = User(**kwargs)
     user.save()
     return make_response(jsonify(user.to_dict()), 201)
 
@@ -71,6 +71,6 @@ def put_user_obj(user_id):
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
     for key, value in request.get_json().items():
         if key not in ignore_keys:
-            setattr(amenity, key, value)
+            setattr(user, key, value)
     user.save()
     return jsonify(user.to_dict()), 200
