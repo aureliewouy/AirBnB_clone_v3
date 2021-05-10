@@ -51,7 +51,7 @@ def delete_cityobj(city_id):
 
 @app_views.route('/states/<state_id>/cities', methods=['POST'],
                  strict_slashes=False)
-def create_cityobj():
+def create_cityobj(state_id):
     """creates a City"""
     state = storage.get(State, state_id)
     if state is None:
@@ -62,7 +62,7 @@ def create_cityobj():
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
     if 'name' not in kwargs:
         return make_response(jsonify({'error': 'Missing name'}), 400)
-    # obj = class(**kwargs)
+    kwargs['state_id'] = state_id
     city = City(**kwargs)
     city.save()
     return make_response(jsonify(city.to_dict()), 201)
