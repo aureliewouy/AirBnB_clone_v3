@@ -46,13 +46,13 @@ def delete_amenity_obj(amenity_id):
 def create_amenity_obj():
     """creates a Amenity"""
     # request.get_json() - converts the JSON object into Python data
-    state_data = request.get_json()
-    if not amenity_data:
+    kwargs = request.get_json()
+    if not kwargs:
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
-    if 'name' not in amenity_data:
+    if 'name' not in kwargs:
         return make_response(jsonify({'error': 'Missing name'}), 400)
     # obj = class(**kwargs)
-    amenity = Amenity(**amenity_data)
+    amenity = Amenity(**kwargs)
     amenity.save()
     return make_response(jsonify(amenity.to_dict()), 201)
 

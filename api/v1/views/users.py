@@ -20,7 +20,7 @@ def get_users():
 
 @app_views.route('/users/<user_id>', methods=['GET'],
                  strict_slashes=False)
-def get_user_obj(user_id):
+def get_userobj(user_id):
     """get info about user obj by id"""
     user = storage.get(User, user_id)
     if user:
@@ -31,7 +31,7 @@ def get_user_obj(user_id):
 
 @app_views.route('/users/<user_id>', methods=['DELETE'],
                  strict_slashes=False)
-def delete_user_obj(user_id):
+def delete_userobj(user_id):
     """delete user obj by id"""
     user = storage.get(User, user_id)
     if user:
@@ -43,7 +43,7 @@ def delete_user_obj(user_id):
 
 
 @app_views.route('/users', methods=['POST'], strict_slashes=False)
-def create_user_obj():
+def create_userobj():
     """creates a User"""
     # request.get_json() - converts the JSON object into Python data
     kwargs = request.get_json()
@@ -53,7 +53,6 @@ def create_user_obj():
         return make_response(jsonify({'error': 'Missing email'}), 400)
     if 'password' not in kwargs:
         return make_response(jsonify({'error': 'Missing password'}), 400)
-    # obj = class(**kwargs)
     user = User(**kwargs)
     user.save()
     return make_response(jsonify(user.to_dict()), 201)
@@ -61,7 +60,7 @@ def create_user_obj():
 
 @app_views.route('/users/<user_id>', methods=['PUT'],
                  strict_slashes=False)
-def put_user_obj(user_id):
+def put_userobj(user_id):
     """update user obj by id"""
     ignore_keys = ['id', 'email', 'created_at', 'updated_at']
     user = storage.get(User, user_id)
