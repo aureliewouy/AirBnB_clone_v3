@@ -14,7 +14,7 @@ def status():
     return jsonify({"status": "OK"})
 
 
-@app_views.route("/api/v1/stats")
+@app_views.route("/stats")
 def stats():
     """ Returns the count method """
     dict_type = {}
