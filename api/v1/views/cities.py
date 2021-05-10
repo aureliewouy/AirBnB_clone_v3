@@ -40,7 +40,7 @@ def get_cityobj(city_id):
                  strict_slashes=False)
 def delete_cityobj(city_id):
     """delete city obj by id"""
-    city = storage.get(State, state_id)
+    city = storage.get(City, city_id)
     if city:
         city.delete()
         storage.save()
@@ -54,13 +54,13 @@ def delete_cityobj(city_id):
 def create_cityobj():
     """creates a City"""
     state = storage.get(State, state_id)
-    if not state:
+    if state is None:
         abort(404)
     # request.get_json() - converts the JSON object into Python data
-    city_data = request.get_json()
-    if not city_data:
+    kwargs = request.get_json()
+    if not kwargs:
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
-    if 'name' not in city_data:
+    if 'name' not in kwargs:
         return make_response(jsonify({'error': 'Missing name'}), 400)
     # obj = class(**kwargs)
     city = City(**city_data)
@@ -70,14 +70,16 @@ def create_cityobj():
 
 @app_views.route('/cities/<city_id>', methods=['PUT'],
                  strict_slashes=False)
-def put_cityobj(state_id):
+def put_cityobj(city_id):
     """update city obj by id"""
+    ignore_keys = ['id', 'state_id', 'created_at', 'updated_at']
     city = storage.get(City, city_id)
     if city is None:
         abort(404)
     if not request.get_json():
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
     for key, value in request.get_json().items():
-        setattr(city, key, value)
+        if key not in ignore_keys:
+            setattr(city, key, value)
     state.save()
     return jsonify(city.to_dict()), 200
