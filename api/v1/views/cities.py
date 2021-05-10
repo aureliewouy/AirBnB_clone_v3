@@ -16,7 +16,7 @@ def get_cities(state_id):
     """retrieves the list of all City objects of a State"""
     cities = []
     state = storage.get(State, state_id)
-    if not state:
+    if state is None:
         abort(404)
     for city in storage.all(City).values():
         # verif state_id in json
@@ -81,5 +81,5 @@ def put_cityobj(city_id):
     for key, value in request.get_json().items():
         if key not in ignore_keys:
             setattr(city, key, value)
-    state.save()
+    city.save()
     return jsonify(city.to_dict()), 200
