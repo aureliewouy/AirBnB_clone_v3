@@ -63,7 +63,7 @@ def create_cityobj():
     if 'name' not in kwargs:
         return make_response(jsonify({'error': 'Missing name'}), 400)
     # obj = class(**kwargs)
-    city = City(**city_data)
+    city = City(**kwargs)
     city.save()
     return make_response(jsonify(city.to_dict()), 201)
 
