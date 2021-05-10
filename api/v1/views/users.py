@@ -50,7 +50,7 @@ def create_user_obj():
     if not kwargs:
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
     if 'email' not in kwargs:
-        return make_response(jsonify({'error': 'Missing name'}), 400)
+        return make_response(jsonify({'error': 'Missing email'}), 400)
     if 'password' not in kwargs:
         return make_response(jsonify({'error': 'Missing password'}), 400)
     # obj = class(**kwargs)
