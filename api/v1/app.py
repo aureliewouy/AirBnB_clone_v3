@@ -11,6 +11,7 @@ app.register_blueprint(app_views)
 
 @app.teardown_appcontext
 def teardown(self):
+    """A method calls storage.close()"""
     storage.close()
 
 @app.errorhandler(404)
