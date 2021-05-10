@@ -3,6 +3,7 @@
 from flask import Flask, Blueprint, jsonify
 from models import storage
 from api.v1.views import app_views
+import os
 
 
 app = Flask(__name__)
@@ -22,4 +23,5 @@ def page_not_found(e):
     return jsonify({"error": "Not found"}), 404
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port='5000', threaded=True)
+    app.run(host=os.getenv('HBNB_API_HOST'),
+            port=os.getenv('HBNB_API_PORT'), threaded=True)
