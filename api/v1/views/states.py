@@ -46,13 +46,14 @@ def delete_stateobj(state_id):
 def create_stateobj():
     """creates a State"""
     # request.get_json() - converts the JSON object into Python data
-    state_data = request.get_json()
-    if not state_data:
-        return make_response(jsonify({'error': 'Not a JSON'}), 400)
-    if 'name' not in state_data:
+    try:
+        kwargs = request.get_json()
+    except:
+        return {"error": "Not a JSON"}, 400
+    if 'name' not in kwargs:
         return make_response(jsonify({'error': 'Missing name'}), 400)
     # obj = class(**kwargs)
-    state = State(**state_data)
+    state = State(**kwargs)
     state.save()
     return make_response(jsonify(state.to_dict()), 201)
 
@@ -61,12 +62,16 @@ def create_stateobj():
                  strict_slashes=False)
 def put_stateobj(state_id):
     """update state obj by id"""
+    ignore_keys = ['id', 'created_at', 'updated_at']
     state = storage.get(State, state_id)
     if state is None:
         abort(404)
-    if not request.get_json():
-        return make_response(jsonify({'error': 'Not a JSON'}), 400)
+    try:
+        kwargs = request.get_json()
+    except:
+        return {"error": "Not a JSON"}, 400
     for key, value in request.get_json().items():
-        setattr(state, key, value)
+        if key not in ignore_keys:
+            setattr(state, key, value)
     state.save()
     return jsonify(state.to_dict())
