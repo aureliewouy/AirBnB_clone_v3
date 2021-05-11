@@ -53,12 +53,12 @@ def delete_reviewobj(review_id):
                  strict_slashes=False)
 def create_revieweobj(place_id):
     """creates a Review"""
+    kwargs = request.get_json()
     if storage.get(Place, place_id) is None:
         abort(404)
     if storage.get(User, user_id) is None:
         abort(404)
 
-    kwargs = request.get_json()
     if not kwargs:
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
     if 'user_id' not in kwargs:
@@ -66,6 +66,8 @@ def create_revieweobj(place_id):
     if 'text' not in kwargs:
         return make_response(jsonify({'error': 'Missing text'}), 400)
     kwargs['place_id'] = place_id
+    kwargs['user_id'] = user_id
+    kwargs['text'] = text
     review = Review(**kwargs)
     review.save()
     return make_response(jsonify(review.to_dict()), 201)
