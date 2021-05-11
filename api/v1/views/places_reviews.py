@@ -85,4 +85,4 @@ def put_reviewobj(review_id):
         if key not in ignore_keys:
             setattr(review, key, value)
     review.save()
-    return jsonify(review.to_dict())
+    return jsonify(review.to_dict()), 200
