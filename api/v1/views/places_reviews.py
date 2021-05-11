@@ -19,9 +19,8 @@ def get_review(place_id):
     place = storage.get(Place, place_id)
     if place is None:
         abort(404)
-    for review in storage.all(Review).values():
-        if place_id == review.to_dict()['place_id']:
-            reviews.append(review.to_dict())
+    for review in place.reviews:
+        reviews.append(review.to_dict())
     return jsonify(reviews)
 
 
@@ -56,7 +55,7 @@ def create_revieweobj(place_id):
     kwargs = request.get_json()
     if storage.get(Place, place_id) is None:
         abort(404)
-    if storage.get(User, user_id) is None:
+    if storage.get(User, kwargs['user_id']) is None:
         abort(404)
 
     if not kwargs:
@@ -66,8 +65,6 @@ def create_revieweobj(place_id):
     if 'text' not in kwargs:
         return make_response(jsonify({'error': 'Missing text'}), 400)
     kwargs['place_id'] = place_id
-    kwargs['user_id'] = user_id
-    kwargs['text'] = text
     review = Review(**kwargs)
     review.save()
     return make_response(jsonify(review.to_dict()), 201)
