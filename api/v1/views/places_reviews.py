@@ -59,11 +59,11 @@ def create_revieweobj(place_id):
         abort(404)
 
     if not kwargs:
-        return make_response(jsonify({'error': 'Not a JSON'}), 404)
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
     if 'user_id' not in kwargs:
-        return make_response(jsonify({'error': 'Missing user_id'}), 404)
+        return make_response(jsonify({'error': 'Missing user_id'}), 400)
     if 'text' not in kwargs:
-        return make_response(jsonify({'error': 'Missing text'}), 404)
+        return make_response(jsonify({'error': 'Missing text'}), 400)
     kwargs['place_id'] = place_id
     review = Review(**kwargs)
     review.save()
@@ -80,7 +80,7 @@ def put_reviewobj(review_id):
         abort(404)
     kwargs = request.get_json()
     if not kwargs:
-        return make_response(jsonify({'error': 'Not a JSON'}), 404)
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
     for key, value in kwargs.items():
         if key not in ignore_keys:
             setattr(review, key, value)
