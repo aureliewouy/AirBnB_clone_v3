@@ -15,10 +15,10 @@ from models.review import Review
                  strict_slashes=False)
 def get_review(place_id):
     """retrieves the list of all Review objects with info about states"""
-    reviews = []
     place = storage.get(Place, place_id)
     if place is None:
         abort(404)
+    reviews = []
     for review in place.reviews:
         reviews.append(review.to_dict())
     return jsonify(reviews)
@@ -59,11 +59,11 @@ def create_revieweobj(place_id):
         abort(404)
 
     if not kwargs:
-        return make_response(jsonify({'error': 'Not a JSON'}), 400)
+        return make_response(jsonify({'error': 'Not a JSON'}), 404)
     if 'user_id' not in kwargs:
-        return make_response(jsonify({'error': 'Missing user_id'}), 400)
+        return make_response(jsonify({'error': 'Missing user_id'}), 404)
     if 'text' not in kwargs:
-        return make_response(jsonify({'error': 'Missing text'}), 400)
+        return make_response(jsonify({'error': 'Missing text'}), 404)
     kwargs['place_id'] = place_id
     review = Review(**kwargs)
     review.save()
@@ -80,7 +80,7 @@ def put_reviewobj(review_id):
         abort(404)
     kwargs = request.get_json()
     if not kwargs:
-        return make_response(jsonify({'error': 'Not a JSON'}), 400)
+        return make_response(jsonify({'error': 'Not a JSON'}), 404)
     for key, value in kwargs.items():
         if key not in ignore_keys:
             setattr(review, key, value)
