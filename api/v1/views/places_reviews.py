@@ -6,6 +6,7 @@ A new view for Review objects that handles all default RestFul API actions
 from flask import Flask, abort, make_response, jsonify, request
 from models import storage
 from api.v1.views import app_views
+from models.user import User
 from models.place import Place
 from models.review import Review
 
@@ -50,7 +51,7 @@ def delete_reviewobj(review_id):
 
 @app_views.route('/places/<place_id>/reviews', methods=['POST'],
                  strict_slashes=False)
-def create_revieweobj():
+def create_revieweobj(place_id):
     """creates a Review"""
     if storage.get(Place, place_id) is None:
         abort(404)
